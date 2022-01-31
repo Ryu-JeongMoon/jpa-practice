@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -69,6 +71,14 @@ public class Member {
 
   @Embedded
   private Address homeAddress;
+
+  @Embedded
+  @AttributeOverrides(value = {
+    @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+    @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+    @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
+  })
+  private Address workAddress;
 
   public Member(String username) {
     this.username = username;
