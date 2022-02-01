@@ -16,7 +16,8 @@ import lombok.ToString.Exclude;
 @Getter
 @Setter
 @ToString
-@NamedQuery(name = "Member.findByUsername",
+@NamedQuery(
+  name = "Member.findByUsername",
   query = "select m from Member m where m.username = :username")
 public class Member {
 

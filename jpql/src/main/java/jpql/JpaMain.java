@@ -17,26 +17,64 @@ public class JpaMain {
     tx.begin();
 
     try {
-      Team team = new Team();
-      team.setName("teamA");
-      em.persist(team);
+      Team teamA = new Team();
+      teamA.setName("teamA");
+      em.persist(teamA);
 
-      Member member = new Member();
-      member.setUsername("teamA");
-      member.setAge(20);
-      member.changeTeam(team);
-      em.persist(member);
+      Team teamB = new Team();
+      teamB.setName("teamB");
+      em.persist(teamB);
 
+      Member member1 = new Member();
+      member1.setUsername("teamA");
+      member1.setAge(20);
+      member1.changeTeam(teamA);
+      em.persist(member1);
+
+      Member member2 = new Member();
+      member2.setUsername("teamA");
+      member2.setAge(20);
+      member2.changeTeam(teamA);
+      em.persist(member2);
+
+      Member member3 = new Member();
+      member3.setUsername("teamA");
+      member3.setAge(20);
+      member3.changeTeam(teamB);
+      em.persist(member3);
 
       // from 절 서브쿼리 사용 불가
       String query1 = "select m from (select m2 from Member m2 where m2.username = 'teamA') m";
 
       String query2 = "select m from Member m where exists (select t from Team t where t.name = 'teamA')";
-      List<Member> members = em.createQuery(query2, Member.class)
+
+      String query3 = "select t from Team t";
+
+      String query4 = "select t from Team t join t.members";
+
+      String query5 = "select t from Team t join fetch t.members";
+
+      String query6 = "select distinct t from Team t join fetch t.members";
+
+      List<Team> result = em.createQuery(query4, Team.class)
         .getResultList();
 
-      for (Member m : members) {
-        System.out.println("m = " + m);
+      System.out.println("result.size = " + result.size());
+
+      for (Team team : result) {
+        System.out.println("team = " + team);
+        for (Member member : team.getMembers()) {
+          System.out.println("  -> member = " + member);
+        }
+      }
+      System.out.println("=================================");
+
+      List<Member> members = em.createNamedQuery("Member.findByUsername", Member.class)
+        .setParameter("username", "teamA")
+        .getResultList();
+
+      for (Member member : members) {
+        System.out.println("member = " + member);
       }
 
       tx.commit();
@@ -112,4 +150,23 @@ JPA Sub Query 한계
 JPA 표준 스펙에서는 where, having 절에서만 sub query 가능
 Hibernate 구현체에서는 select 에서도 지원
 from 절에서의 서브 쿼리는 JPQL 에서 불가능
+
+JPQL 에서 distinct 는 두가지 기능을 수행한다
+1. DB 쿼리 날릴 때 distinct 기능 적용
+2. Application level 에서 중복 제거
+main 에서 query5 / query6 비교 시 query5는 teamA에 대한 정보가 두개 나온다
+애플리케이션 레벨에서 이는 중복이므로 teamA 정보가 한번만 나오도록 줄일 때 JPQL distinct 키워드를 사용하면 된다
+
+Spring Data JPA 를 사용하면 Repository 에서 NamedQuery 를 @Query 사용하여 메서드 위에 붙여쓸 수 있게 된다
+NamedQuery 의 장점을 그대로 가져간다
+1. 정적 쿼리만 가능하지만 초기화 시점에 로딩하고 캐싱해둔다
+2. 초기화 시점에 에러 검증한다
+
+벌크 연산
+JPA 는 실시간 처리에 최적화 되어 있다
+단건 수정 시에는 dirty checking 으로 하지만
+여러 행에 수정 / 삭제 치는 기능도 필요하다
+em.executeUpdate() -> Persistence Context 무시하고 DB 에 직접 쿼리 날린다
+따라서 벌크 연산은 독립적으로 수행한다고 생각하면 되고
+벌크 연산을 먼저 실행하거나 연산 수행 후 영속성 컨텍스트 초기화가 필요하다
  */
