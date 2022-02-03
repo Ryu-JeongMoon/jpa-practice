@@ -105,3 +105,7 @@ public class Order {
       .sum();
   }
 }
+
+/*
+@OneToOne 관계에서의 FK 는 로직 상 더 자주 접근하는 테이블(driving table) 에 두는 것이 좋다
+ */

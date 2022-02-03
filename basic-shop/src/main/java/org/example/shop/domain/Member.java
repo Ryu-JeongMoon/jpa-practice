@@ -9,12 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
   @Id
@@ -31,3 +34,10 @@ public class Member {
   @OneToMany(mappedBy = "member")
   private List<Order> orders = new ArrayList<>();
 }
+
+/*
+Entity 전체에 @NoArgsConstructor(access = AccessLevel.PROTECTED) 바르고 모든 Fetch 는 LAZY 로 해놓자
+JPA 가 Reflection, Proxy 등을 활용할 수 있게 기본 생성자를 열어놔야 하는데
+public 으로 열어놓으면 다른 개발자가 사용할 수 있으므로 protected 라도 제한을 걸어둬야 한다
+FetchType.EAGER 는 N + 1 문제를 발생 시킬 여지가 있고 이 외에도 예측하기 힘든 쿼리를 발생시킨다
+ */

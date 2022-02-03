@@ -59,3 +59,10 @@ public class OrderItem {
     return getOrderPrice() * getCount();
   }
 }
+
+/*
+@ManyToMany 를 실제 업무에 사용하는 것을 지양하자
+어차피 조인 테이블 생성되는 것은 같으나 ManyToMany 매핑에 의한 테이블은 다른 컬럼 추가가 불가능하다
+작은 프로젝트라면 써도 되겠지만 현업에서는 테이블에 아이디 컬럼 2개만 딸랑 두는 경우는 없다
+운영을 위해 등록 / 수정 관련 정보가 필요하기 때문
+ */

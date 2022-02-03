@@ -27,18 +27,14 @@ public abstract class Item {
   private Long id;
 
   private String name;
+
   private int price;
+
   private int stockQuantity;
 
   @ManyToMany(mappedBy = "items")
   private List<Category> categories = new ArrayList<>();
 
-
-  /**
-   * stock 증가
-   *
-   * @param stockQuantity
-   */
   public void addStock(int stockQuantity) {
     this.stockQuantity += stockQuantity;
   }
