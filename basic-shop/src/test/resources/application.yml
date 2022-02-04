@@ -17,3 +17,6 @@ logging:
   level:
     org.hibernate.SQL: debug
 #    org.hibernate.type: trace
+
+
+# test-resources 에서 datasource, jpa 설정 안 해도 기본적으로 mem:testdb 로 돌아감

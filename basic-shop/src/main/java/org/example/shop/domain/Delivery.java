@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,4 +35,11 @@ public class Delivery {
 
   @Enumerated(EnumType.STRING)
   private DeliveryStatus status;
+
+  @Builder
+  public Delivery(Order order, Address address, DeliveryStatus status) {
+    this.order = order;
+    this.address = address;
+    this.status = status;
+  }
 }

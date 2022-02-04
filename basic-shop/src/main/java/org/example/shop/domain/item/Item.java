@@ -2,6 +2,7 @@ package org.example.shop.domain.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ public abstract class Item {
 
   @Id
   @GeneratedValue
+  @Column(name = "item_id")
   private Long id;
 
   private String name;
@@ -46,5 +48,4 @@ public abstract class Item {
     }
     this.stockQuantity = restStock;
   }
-
 }

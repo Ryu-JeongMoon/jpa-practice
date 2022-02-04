@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +34,13 @@ public class Member {
   @JsonIgnore
   @OneToMany(mappedBy = "member")
   private List<Order> orders = new ArrayList<>();
+
+  @Builder
+  public Member(String name, Address address, List<Order> orders) {
+    this.name = name;
+    this.address = address;
+    this.orders = orders;
+  }
 }
 
 /*
