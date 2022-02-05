@@ -31,3 +31,9 @@ public class MemberRepository {
       .getResultList();
   }
 }
+
+/*
+실무에서 merge 사용하면 안 되는 이유
+dirty-checking 은 변경된 값만 DB 에 반영되는데
+merge 는 값을 모두 갈아끼워 버리기 때문에 null 로 들어온 값은 DB 에 null 로 반영된다
+ */

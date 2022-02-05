@@ -88,19 +88,21 @@ public class OrderServiceTest {
   }
 
   private Book createBook(String name, String author, int price, int stockQuantity) {
-    Book book = new Book();
-    book.setName(name);
-    book.setAuthor(author);
-    book.setPrice(price);
-    book.setStockQuantity(stockQuantity);
+    Book book = Book.builder()
+      .name(name)
+      .author(author)
+      .price(price)
+      .stockQuantity(stockQuantity)
+      .build();
     em.persist(book);
     return book;
   }
 
   private Member createMember(String name) {
-    Member member = new Member();
-    member.setName(name);
-    member.setAddress(new Address("seoul", "river", "100200"));
+    Member member = Member.builder()
+      .name(name)
+      .address(new Address("seoul", "river", "100200"))
+      .build();
     em.persist(member);
     return member;
   }

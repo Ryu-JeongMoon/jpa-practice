@@ -30,8 +30,9 @@ public class MemberServiceTest {
   @Rollback(value = false)
   public void join() throws Exception {
     //given
-    Member member = new Member();
-    member.setName("member1");
+    Member member = Member.builder()
+      .name("member1")
+      .build();
     //when
     Long savedId = memberService.join(member);
 
@@ -43,13 +44,15 @@ public class MemberServiceTest {
   @Test(expected = IllegalStateException.class)
   public void duplicate() throws Exception {
     //given
-    Member member1 = new Member();
-    member1.setName("ryu");
+    Member member1 = Member.builder()
+      .name("ryu")
+      .build();
 
-    Member member2 = new Member();
-    member2.setName("ryu");
+    Member member2 = Member.builder()
+      .name("ryu")
+      .build();
+
     //when
-
     memberService.join(member1);
     memberService.join(member2);
 
