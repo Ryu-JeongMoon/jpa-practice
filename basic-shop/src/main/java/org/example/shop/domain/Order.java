@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,6 +28,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "ORDERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(name = "Order.withMember", attributeNodes = @NamedAttributeNode("member"))
 public class Order {
 
   @Id
@@ -33,7 +36,7 @@ public class Order {
   @Column(name = "order_id")
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "member_id")
   private Member member;
 
@@ -107,4 +110,11 @@ public class Order {
 
 /*
 @OneToOne 관계에서의 FK 는 로직 상 더 자주 접근하는 테이블(driving table) 에 두는 것이 좋다
+
+연관된 엔티티를 끌어오기 위해 FetchType.EAGER 쓰면 지옥문 열린다
+FetchType.LAZY 기본으로 다 깔고 필요한 경우에 fetch join 써서 해결하면 되는데
+이 방식의 단점은 중복되는 fetch join 이 너무 많아진다는 것이다
+이를 해결하기 위해 JPA 2.1 에서 @EntityGraph 등장시켰고
+정적 방식인 @NamedEntityGraph, @NamedEntityGraphs
+동적 방식인
  */

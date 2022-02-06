@@ -3,6 +3,9 @@ package org.example.shop.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import org.example.shop.domain.Address;
 import org.example.shop.domain.Member;
@@ -105,5 +108,12 @@ public class OrderServiceTest {
       .build();
     em.persist(member);
     return member;
+  }
+
+  @Test
+  public void namedEntityGraph() {
+    Map hints = new HashMap();
+    hints.put("javax.persistence.fetchgraph", em.getEntityGraph("Order.withMember"));
+    Order findOrder = em.find(Order.class, 1L, hints);
   }
 }
