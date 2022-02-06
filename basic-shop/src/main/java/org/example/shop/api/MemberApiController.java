@@ -3,6 +3,7 @@ package org.example.shop.api;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,6 @@ public class MemberApiController {
 
   @PutMapping("/api/v2/members/{id}")
   public UpdateMemberResponse updateMemberV2(@PathVariable Long id, @RequestBody @Valid UpdateMemberRequest request) {
-
     memberService.update(id, request.getName());
     Member findMember = memberService.findOne(id);
     return new UpdateMemberResponse(findMember.getId(), findMember.getName());
@@ -77,6 +77,7 @@ public class MemberApiController {
   @Data
   static class UpdateMemberRequest {
 
+    @NotEmpty
     private String name;
   }
 
@@ -91,6 +92,7 @@ public class MemberApiController {
   @Data
   static class CreateMemberRequest {
 
+    @NotEmpty
     private String name;
   }
 
