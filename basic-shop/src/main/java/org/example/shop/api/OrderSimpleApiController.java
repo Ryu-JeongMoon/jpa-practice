@@ -12,7 +12,7 @@ import org.example.shop.domain.Order;
 import org.example.shop.domain.OrderStatus;
 import org.example.shop.repository.OrderRepository;
 import org.example.shop.repository.OrderSearch;
-import org.example.shop.repository.simplequery.OrderSimpleQueryRepository;
+import org.example.shop.repository.order.simplequery.OrderSimpleQueryRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

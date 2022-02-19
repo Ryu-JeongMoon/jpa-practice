@@ -1,4 +1,4 @@
-package org.example.shop.repository.query;
+package org.example.shop.repository.order.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

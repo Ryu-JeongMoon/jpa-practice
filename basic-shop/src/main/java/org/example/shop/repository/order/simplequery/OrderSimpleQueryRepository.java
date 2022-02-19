@@ -1,4 +1,4 @@
-package org.example.shop.repository.simplequery;
+package org.example.shop.repository.order.simplequery;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -13,7 +13,7 @@ public class OrderSimpleQueryRepository {
 
   public List<OrderSimpleQueryDto> findOrderDtos() {
     return em.createQuery(
-        "select new org.example.shop.repository.simplequery.OrderSimpleQueryDto(o.id, o.member.name, o.orderDate, o.orderStatus, d.address) from Order o join fetch o.member m join fetch o.delivery d",
+        "select new org.example.shop.repository.order.simplequery.OrderSimpleQueryDto(o.id, o.member.name, o.orderDate, o.orderStatus, d.address) from Order o join fetch o.member m join fetch o.delivery d",
         OrderSimpleQueryDto.class)
       .getResultList();
   }

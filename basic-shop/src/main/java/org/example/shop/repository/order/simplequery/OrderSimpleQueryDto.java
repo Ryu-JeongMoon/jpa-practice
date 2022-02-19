@@ -1,4 +1,4 @@
-package org.example.shop.repository.simplequery;
+package org.example.shop.repository.order.simplequery;
 
 import java.time.LocalDateTime;
 import lombok.Data;

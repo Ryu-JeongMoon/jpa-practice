@@ -1,4 +1,4 @@
-package org.example.shop.repository.query;
+package org.example.shop.repository.order.query;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,4 @@ public class OrderFlatDto {
   private String itemName;
   private int orderPrice;
   private int count;
-
-
 }
