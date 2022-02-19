@@ -39,8 +39,7 @@ public class OrderApiController {
       order.getMember().getName();
       order.getDelivery().getAddress();
       order.getOrderItems()
-        .forEach(orderItem -> orderItem.getItem()
-          .getName());
+        .forEach(orderItem -> orderItem.getItem().getName());
     });
 
     return new Result(orders);

@@ -18,3 +18,7 @@ public class OrderSimpleQueryRepository {
       .getResultList();
   }
 }
+
+/*
+DTO 에 생성자를 만들어 둔 후 FQCN 을 갖다가 처박고 생성자에 데이터 꽂아준다
+ */

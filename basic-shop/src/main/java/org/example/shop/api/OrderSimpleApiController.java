@@ -26,11 +26,27 @@ public class OrderSimpleApiController {
   private final OrderRepository orderRepository;
   private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
+  /**
+   * v1. List<Entity> 반환<br/>
+   * API 는 스펙이기 때문에 변화 가능성이 큰 엔티티를 직접 반환해서는 안 된다<br/>
+   * 또한 엔티티 직접 반환은 N+1 발생 가능성이 있다
+   */
   @GetMapping("/api/v1/simple-orders")
   public List<Order> ordersV1() {
-    return orderRepository.findAllByString(new OrderSearch());
+    List<Order> orders = orderRepository.findAllByString(new OrderSearch());
+
+    // 강제 초기화를 위한 순회
+    for (Order order : orders) {
+      order.getMember().getName();
+      order.getDelivery().getAddress();
+    }
+    return orders;
   }
 
+  /**
+   * v2. DTO 반환<br/>
+   * N+1 문제 발생하여 성능 저하
+   */
   @GetMapping("/api/v2/simple-orders")
   public Result<OrderSimpleDto> ordersV2() {
     List<OrderSimpleDto> result = orderRepository.findAllByString(new OrderSearch())
@@ -40,6 +56,10 @@ public class OrderSimpleApiController {
     return new Result(result);
   }
 
+  /**
+   * v3. Fetch Join 활용한 DTO 반환<br/>
+   * 성능 냠냠굿
+   */
   @GetMapping("/api/v3/simple-orders")
   public Result<OrderSimpleDto> ordersV3() {
     List<OrderSimpleDto> result = orderRepository.findAllWithMemberDelivery()
@@ -49,6 +69,13 @@ public class OrderSimpleApiController {
     return new Result(result);
   }
 
+  /**
+   * v4. DTO 직접 조회<br/>
+   * 엔티티 조회해와서 매핑하는 작업을 줄이기 위해 필요한 필드만 가져오는 선택<br/>
+   * 스펙이 굳어지는 단점이 있다, 재사용성 저하<br/><br/>
+   * Repository 에서 직접 DTO 는 물리적으로만 계층을 나눠 뒀을 뿐 API 스펙이 침투한 것이다<br/>
+   * 영한님은 DTO 조회용 Repository 를 따로 만들어 패키지 자체를 분리해두는 방식으로 해결한다<br/>
+   */
   @GetMapping("/api/v4/simple-orders")
   public Result<OrderSimpleDto> ordersV4() {
     return new Result(orderSimpleQueryRepository.findOrderDtos());
