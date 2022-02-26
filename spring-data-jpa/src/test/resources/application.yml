@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 200
+
+logging.level:
+  org.hibernate.SQL: debug
