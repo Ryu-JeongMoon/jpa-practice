@@ -7,40 +7,42 @@ import javax.persistence.Persistence;
 
 public class JpaMain {
 
-  public static void main(String[] args) {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction tx = em.getTransaction();
+	public static void main(String[] args) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
-    tx.begin();
+		tx.begin();
 
-    try {
-      Member member1 = new Member("member4");
-      Member member2 = new Member("member5");
+		try {
+			Member member1 = new Member("member4");
+			Member member2 = new Member("member5");
 
-      em.persist(member1);
-      em.persist(member2);
+			em.persist(member1);
+			em.persist(member2);
 
-      em.flush();
-      em.clear();
+			em.flush();
+			em.clear();
 
-      Member findMember = em.find(Member.class, member1.getId());
-      System.out.println("findMember = " + findMember);
+			Member referenceMember = em.getReference(Member.class, member1.getId());
+			System.out.println("referenceMember = " + referenceMember);
+			System.out.println("referenceMember.class = " + referenceMember.getClass());
 
-      Member referenceMember = em.getReference(Member.class, member1.getId());
-      System.out.println("referenceMember = " + referenceMember);
+			Member findMember = em.find(Member.class, member1.getId());
+			System.out.println("findMember = " + findMember);
 
-      System.out.println("(findMember == referenceMember) = " + (findMember == referenceMember));
+			System.out.println("(findMember == referenceMember) = " + (findMember == referenceMember));
+			System.out.println("(findMember equals referenceMember) = " + (findMember.equals(referenceMember)));
 
-      tx.commit();
-    } catch (Exception e) {
-      tx.rollback();
-    } finally {
-      em.close();
-    }
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			em.close();
+		}
 
-    emf.close();
-  }
+		emf.close();
+	}
 }
 
 /*

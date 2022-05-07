@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
@@ -23,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,63 +33,62 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SequenceGenerator(name = "MEMBER_SEQ_GENERATOR", sequenceName = "MEMBER_SEQ",
-  initialValue = 1, allocationSize = 50)
+@SequenceGenerator(name = "MEMBER_SEQ_GENERATOR", sequenceName = "MEMBER_SEQ")
 public class Member {
 
-  @Id
-  @Column(name = "MEMBER_ID")
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
-  private Long id;
+	@Id
+	@Column(name = "MEMBER_ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+	private Long id;
 
-  @Column(name = "name")
-  private String username;
+	@Column(name = "name")
+	private String username;
 
-  @Enumerated(EnumType.STRING)
-  private RoleType roleType;
+	@Enumerated(EnumType.STRING)
+	private RoleType roleType;
 
-  @Column(name = "FOOD_NAME")
-  @ElementCollection
-  @CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
-  private Set<String> favoriteFoods = new HashSet<>();
+	@Column(name = "FOOD_NAME")
+	@ElementCollection
+	@CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+	private Set<String> favoriteFoods = new HashSet<>();
 
-  @ElementCollection
-  @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
-  private List<Address> addressHistory = new ArrayList<>();
+	@ElementCollection
+	@CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+	private List<Address> addressHistory = new ArrayList<>();
 
-  @OneToMany(mappedBy = "member")
-  private List<MemberProduct> memberProducts = new ArrayList<>();
+	@OneToMany(mappedBy = "member")
+	private List<MemberProduct> memberProducts = new ArrayList<>();
 
-  @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "TEAM_ID")
-  private Team team;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "TEAM_ID")
+	private Team team;
 
-  @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "LOCKER_ID")
-  private Locker locker;
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "LOCKER_ID")
+	private Locker locker;
 
-  @Embedded
-  private Period workPeriod;
+	@Embedded
+	private Period workPeriod;
 
-  @Embedded
-  private Address homeAddress;
+	@Embedded
+	private Address homeAddress;
 
-  @Embedded
-  @AttributeOverrides(value = {
-    @AttributeOverride(name = "city", column = @Column(name = "work_city")),
-    @AttributeOverride(name = "street", column = @Column(name = "work_street")),
-    @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
-  })
-  private Address workAddress;
+	@Embedded
+	@AttributeOverrides(value = {
+		@AttributeOverride(name = "city", column = @Column(name = "work_city")),
+		@AttributeOverride(name = "street", column = @Column(name = "work_street")),
+		@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
+	})
+	private Address workAddress;
 
-  public Member(String username) {
-    this.username = username;
-  }
+	public Member(String username) {
+		this.username = username;
+	}
 
-  public void changeTeam(Team team) {
-    this.team = team;
-    team.getMembers().add(this);
-  }
+	public void changeTeam(Team team) {
+		this.team = team;
+		team.getMembers().add(this);
+	}
 }
 
 /*

@@ -29,11 +29,11 @@ public class Parent {
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
   @Exclude
-  private List<Child> childList = new ArrayList<>();
+  private List<Child> children = new ArrayList<>();
 
-  public void addChild(Child child) {
-    childList.add(child);
-    child.setParent(this);
+  public void addChildren(List<Child> children) {
+    this.children.addAll(children);
+    this.children.forEach(child -> child.setParent(this));
   }
 
   @Override
