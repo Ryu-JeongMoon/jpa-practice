@@ -1,5 +1,7 @@
 package hellojpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -15,6 +17,11 @@ public class JPQLMain {
     tx.begin();
 
     try {
+
+      List<Member> members = em.createQuery("select m from Member m where m.username like 'panda'", Member.class).getResultList();
+      for (Member member : members) {
+        System.out.println("member = " + member);
+      }
 
       tx.commit();
     } catch (Exception e) {
