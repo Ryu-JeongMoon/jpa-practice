@@ -1,12 +1,12 @@
 package org.example.shop.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.EntityGraph;
+
 import javax.persistence.EntityManager;
+
 import org.example.shop.domain.Address;
 import org.example.shop.domain.Member;
 import org.example.shop.domain.Order;
@@ -28,92 +28,92 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class OrderServiceTest {
 
-  @Autowired
-  EntityManager em;
-  @Autowired
-  OrderService orderService;
-  @Autowired
-  OrderRepository orderRepository;
-  @Autowired
-  MemberRepository memberRepository;
+	@Autowired
+	EntityManager em;
+	@Autowired
+	OrderService orderService;
+	@Autowired
+	OrderRepository orderRepository;
+	@Autowired
+	MemberRepository memberRepository;
 
-  @Test
-  public void order() throws Exception {
-    //given
-    Member member = createMember("user1");
+	@Test
+	public void order() throws Exception {
+		//given
+		Member member = createMember("user1");
 
-    Book book = createBook("JPA!!", "kim", 10000, 10);
+		Book book = createBook("JPA!!", "kim", 10000, 10);
 
-    int orderCount = 2;
-    //when
-    Long orderId = orderService.order(member.getId(), book.getId(), orderCount);
+		int orderCount = 2;
+		//when
+		Long orderId = orderService.order(member.getId(), book.getId(), orderCount);
 
-    Order order = orderRepository.findOne(orderId);
-    //then
+		Order order = orderRepository.findOne(orderId);
+		//then
 
-    assertEquals("상품 주문시 주문 상태는 ORDER", OrderStatus.ORDER, order.getOrderStatus());
-    assertEquals("주문한 상품 종류 수가 정확해야 함", 1, order.getOrderItems().size());
-    assertEquals("주문 가격은 가격 * 주문 수량", 10000 * orderCount, order.getTotalPrice());
-    assertEquals("주문 수량만큼 재고가 줄어야 한다", 8, book.getStockQuantity());
+		assertEquals("상품 주문시 주문 상태는 ORDER", OrderStatus.ORDER, order.getOrderStatus());
+		assertEquals("주문한 상품 종류 수가 정확해야 함", 1, order.getOrderItems().size());
+		assertEquals("주문 가격은 가격 * 주문 수량", 10000 * orderCount, order.getTotalPrice());
+		assertEquals("주문 수량만큼 재고가 줄어야 한다", 8, book.getStockQuantity());
 
-  }
+	}
 
-  @Test(expected = NotEnoughStockException.class)
-  public void 주문수량초과() throws Exception {
-    //given
-    Member member = createMember("user1");
-    Item item = createBook("JPA!!", "kim", 10000, 10);
+	@Test(expected = NotEnoughStockException.class)
+	public void 주문수량초과() throws Exception {
+		//given
+		Member member = createMember("user1");
+		Item item = createBook("JPA!!", "kim", 10000, 10);
 
-    //when
-    int count = 11;
-    orderService.order(member.getId(), item.getId(), count);
+		//when
+		int count = 11;
+		orderService.order(member.getId(), item.getId(), count);
 
-    //then
-    fail("재고 수량 부족 예외 발생해야 함");
-  }
+		//then
+		fail("재고 수량 부족 예외 발생해야 함");
+	}
 
-  @Test
-  public void 주문_취소() throws Exception {
-    //given
-    Member member = createMember("user1");
-    Item item = createBook("JPA!!", "kim", 10000, 10);
+	@Test
+	public void 주문_취소() throws Exception {
+		//given
+		Member member = createMember("user1");
+		Item item = createBook("JPA!!", "kim", 10000, 10);
 
-    int count = 3;
-    Long orderId = orderService.order(member.getId(), item.getId(), count);
+		int count = 3;
+		Long orderId = orderService.order(member.getId(), item.getId(), count);
 
-    //when
-    orderService.cancelOrder(orderId);
-    Order findOrder = orderRepository.findOne(orderId);
+		//when
+		orderService.cancelOrder(orderId);
+		Order findOrder = orderRepository.findOne(orderId);
 
-    //then
-    assertEquals("주문 취소시 상태는 CANCEL", OrderStatus.CANCEL, findOrder.getOrderStatus());
-    assertEquals("주문 취소시 재고는 원복", 10, item.getStockQuantity());
-  }
+		//then
+		assertEquals("주문 취소시 상태는 CANCEL", OrderStatus.CANCEL, findOrder.getOrderStatus());
+		assertEquals("주문 취소시 재고는 원복", 10, item.getStockQuantity());
+	}
 
-  private Book createBook(String name, String author, int price, int stockQuantity) {
-    Book book = Book.builder()
-      .name(name)
-      .author(author)
-      .price(price)
-      .stockQuantity(stockQuantity)
-      .build();
-    em.persist(book);
-    return book;
-  }
+	private Book createBook(String name, String author, int price, int stockQuantity) {
+		Book book = Book.builder()
+			.name(name)
+			.author(author)
+			.price(price)
+			.stockQuantity(stockQuantity)
+			.build();
+		em.persist(book);
+		return book;
+	}
 
-  private Member createMember(String name) {
-    Member member = Member.builder()
-      .name(name)
-      .address(new Address("seoul", "river", "100200"))
-      .build();
-    em.persist(member);
-    return member;
-  }
+	private Member createMember(String name) {
+		Member member = Member.builder()
+			.name(name)
+			.address(new Address("seoul", "river", "100200"))
+			.build();
+		em.persist(member);
+		return member;
+	}
 
-  @Test
-  public void namedEntityGraph() {
-    Map hints = new HashMap();
-    hints.put("javax.persistence.fetchgraph", em.getEntityGraph("Order.withMember"));
-    Order findOrder = em.find(Order.class, 1L, hints);
-  }
+	@Test
+	public void namedEntityGraph() {
+		Map hints = new HashMap();
+		hints.put("javax.persistence.fetchgraph", em.getEntityGraph("Order.withMember"));
+		Order findOrder = em.find(Order.class, 1L, hints);
+	}
 }

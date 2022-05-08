@@ -11,6 +11,7 @@ import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,46 +23,46 @@ import lombok.ToString;
 @EntityListeners(value = DuckListener.class)
 public class Duck {
 
-  @Id
-  @GeneratedValue
-  private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-  private String name;
+	private String name;
 
-  @PrePersist
-  public void prePersist() {
-    System.out.println("Duck.perPersist id = " + id);
-  }
+	@PrePersist
+	public void prePersist() {
+		System.out.println("Duck.perPersist id = " + id);
+	}
 
-  @PostPersist
-  public void postPersist() {
-    System.out.println("Duck.postPersist id = " + id);
-  }
+	@PostPersist
+	public void postPersist() {
+		System.out.println("Duck.postPersist id = " + id);
+	}
 
-  @PreUpdate
-  public void preUpdate() {
-    System.out.println("Duck.preUpdate");
-  }
+	@PreUpdate
+	public void preUpdate() {
+		System.out.println("Duck.preUpdate");
+	}
 
-  @PostUpdate
-  public void postUpdate() {
-    System.out.println("Duck.postUpdate");
-  }
+	@PostUpdate
+	public void postUpdate() {
+		System.out.println("Duck.postUpdate");
+	}
 
-  @PostLoad
-  public void postLoad() {
-    System.out.println("Duck.postLoad");
-  }
+	@PostLoad
+	public void postLoad() {
+		System.out.println("Duck.postLoad");
+	}
 
-  @PreRemove
-  public void preRemove() {
-    System.out.println("Duck.preRemove");
-  }
+	@PreRemove
+	public void preRemove() {
+		System.out.println("Duck.preRemove");
+	}
 
-  @PostRemove
-  public void postRemove() {
-    System.out.println("Duck.postRemove");
-  }
+	@PostRemove
+	public void postRemove() {
+		System.out.println("Duck.postRemove");
+	}
 }
 
 /*

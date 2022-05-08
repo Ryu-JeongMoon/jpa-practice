@@ -1,13 +1,14 @@
 package org.example.shop.repository;
 
+import org.example.shop.domain.OrderStatus;
+
 import lombok.Getter;
 import lombok.Setter;
-import org.example.shop.domain.OrderStatus;
 
 @Getter
 @Setter
 public class OrderSearch {
 
-  private String memberName;
-  private OrderStatus orderStatus;
+	private String memberName;
+	private OrderStatus orderStatus;
 }

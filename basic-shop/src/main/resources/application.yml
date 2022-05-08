@@ -6,9 +6,11 @@ spring:
     driver-class-name: org.h2.Driver
 
   jpa:
-#    open-in-view: false
+    open-in-view: false
     hibernate:
       ddl-auto: create
+      use-new-id-generator-mappings: true
+
     properties:
       hibernate:
         format_sql: true

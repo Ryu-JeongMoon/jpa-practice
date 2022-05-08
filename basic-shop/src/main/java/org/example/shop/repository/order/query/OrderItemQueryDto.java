@@ -7,8 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class OrderItemQueryDto {
 
-  private Long orderId;
-  private String itemName;
-  private int orderPrice;
-  private int count;
+	private Long orderId;
+	private String itemName;
+	private int orderPrice;
+	private int count;
 }
