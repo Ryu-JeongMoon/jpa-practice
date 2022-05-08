@@ -1,6 +1,7 @@
 package hellojpa.advancedmapping;
 
 import javax.persistence.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Movie extends Item {
 
-  private String director;
-  private String actor;
+	private String director;
+	private String actor;
 
 }

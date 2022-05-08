@@ -1,6 +1,6 @@
 package hellojpa;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,14 +10,14 @@ import javax.persistence.OneToOne;
 @Entity
 public class Locker {
 
-  @Id
-  @GeneratedValue
-  private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-  private String name;
+	private String name;
 
-  @OneToOne(mappedBy = "locker", fetch = LAZY)
-  private Member member;
+	@OneToOne(mappedBy = "locker", fetch = LAZY)
+	private Member member;
 }
 
 /*

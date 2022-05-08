@@ -1,6 +1,6 @@
 package hellojpa;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;

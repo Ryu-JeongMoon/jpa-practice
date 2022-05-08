@@ -1,7 +1,9 @@
 package hellojpa;
 
 import java.time.LocalDateTime;
+
 import javax.persistence.MappedSuperclass;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,10 +12,10 @@ import lombok.Setter;
 @Setter
 public abstract class BaseEntity {
 
-  private String createdBy;
-  private String lastModifiedBy;
-  private LocalDateTime createdDate;
-  private LocalDateTime lastModifiedDate;
+	private String createdBy;
+	private String lastModifiedBy;
+	private LocalDateTime createdDate;
+	private LocalDateTime lastModifiedDate;
 }
 
 /*

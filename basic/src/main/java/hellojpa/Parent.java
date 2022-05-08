@@ -3,17 +3,20 @@ package hellojpa;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.Hibernate;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.ToString.Exclude;
-import org.hibernate.Hibernate;
 
 @Entity
 @Getter
@@ -22,36 +25,36 @@ import org.hibernate.Hibernate;
 @RequiredArgsConstructor
 public class Parent {
 
-  @Id
-  @GeneratedValue
-  private Long id;
-  private String name;
+	@Id
+	@GeneratedValue
+	private Long id;
+	private String name;
 
-  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-  @Exclude
-  private List<Child> children = new ArrayList<>();
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Exclude
+	private List<Child> children = new ArrayList<>();
 
-  public void addChildren(List<Child> children) {
-    this.children.addAll(children);
-    this.children.forEach(child -> child.setParent(this));
-  }
+	public void addChildren(List<Child> children) {
+		this.children.addAll(children);
+		this.children.forEach(child -> child.setParent(this));
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    Parent parent = (Parent) o;
-    return id != null && Objects.equals(id, parent.id);
-  }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+			return false;
+		}
+		Parent parent = (Parent)o;
+		return id != null && Objects.equals(id, parent.id);
+	}
 
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }
 
 /*

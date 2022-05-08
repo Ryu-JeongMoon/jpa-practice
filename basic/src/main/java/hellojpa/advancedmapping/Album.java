@@ -1,6 +1,7 @@
 package hellojpa.advancedmapping;
 
 import javax.persistence.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Album extends Item {
 
-  private String artist;
+	private String artist;
 }
