@@ -1,5 +1,7 @@
 package hellojpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -15,24 +17,7 @@ public class JpaMain {
 		tx.begin();
 
 		try {
-			Member member1 = new Member("member4");
-			Member member2 = new Member("member5");
-
-			em.persist(member1);
-			em.persist(member2);
-
-			em.flush();
-			em.clear();
-
-			Member referenceMember = em.getReference(Member.class, member1.getId());
-			System.out.println("referenceMember = " + referenceMember);
-			System.out.println("referenceMember.class = " + referenceMember.getClass());
-
-			Member findMember = em.find(Member.class, member1.getId());
-			System.out.println("findMember = " + findMember);
-
-			System.out.println("(findMember == referenceMember) = " + (findMember == referenceMember));
-			System.out.println("(findMember equals referenceMember) = " + (findMember.equals(referenceMember)));
+			printWrongPagedCollection(em);
 
 			tx.commit();
 		} catch (Exception e) {
@@ -42,6 +27,68 @@ public class JpaMain {
 		}
 
 		emf.close();
+	}
+
+	private static void printWrongPagedCollection(EntityManager em) {
+		String query = "select t from Team t";
+		List<Team> teams = em.createQuery(query, Team.class)
+			.setFirstResult(0)
+			.setMaxResults(5)
+			.getResultList();
+
+		System.out.println("teams.size() = " + teams.size());
+
+		for (Team team : teams) {
+			for (Member member : team.getMembers()) {
+				System.out.printf("team => %s | member => %s\n", team.getName(), member.getUsername());
+			}
+		}
+	}
+
+	private static void printReferenceMember(EntityManager em) {
+		Member member1 = new Member("member4");
+		Member member2 = new Member("member5");
+
+		em.persist(member1);
+		em.persist(member2);
+
+		em.flush();
+		em.clear();
+
+		Member referenceMember = em.getReference(Member.class, member1.getId());
+		System.out.println("referenceMember = " + referenceMember);
+		System.out.println("referenceMember.class = " + referenceMember.getClass());
+
+		Member findMember = em.find(Member.class, member1.getId());
+		System.out.println("findMember = " + findMember);
+
+		System.out.println("(findMember == referenceMember) = " + (findMember == referenceMember));
+		System.out.println("(findMember equals referenceMember) = " + (findMember.equals(referenceMember)));
+	}
+
+	private static void printTeamNameByNPlusOne(EntityManager em) {
+		List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+		for (Member member : members) {
+			System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+		}
+	}
+
+	private static void printTeamNameByFetchJoin(EntityManager em) {
+		List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
+		for (Member member : members) {
+			System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+		}
+	}
+
+	private static void createTeamsAndMembers(EntityManager em) {
+		for (int i = 0; i < 10; i++) {
+			Team team = Team.builder().name("team" + Character.toString(65 + i)).build();
+			em.persist(team);
+
+			Member member = new Member("panda" + Character.toString(65 + i));
+			member.changeTeam(team);
+			em.persist(member);
+		}
 	}
 }
 

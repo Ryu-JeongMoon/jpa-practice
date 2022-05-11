@@ -9,7 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import lombok.AllArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +20,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Team extends BaseEntity {
 
 	@Id
@@ -28,8 +29,16 @@ public class Team extends BaseEntity {
 
 	private String name;
 
+	// @BatchSize(size = 50)
 	@OneToMany(mappedBy = "team")
 	private List<Member> members = new ArrayList<>();
+
+	@Builder
+	public Team(Long id, String name, List<Member> members) {
+		this.id = id;
+		this.name = name;
+		this.members = members != null ? members : new ArrayList<>();
+	}
 }
 
 /*
